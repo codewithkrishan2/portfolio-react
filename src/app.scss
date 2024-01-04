@@ -1,0 +1,61 @@
+html{
+    scroll-snap-type: y mandatory;
+    scroll-behavior: smooth;
+}
+
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: "DM Sans", sans-serif; 
+}
+
+::selection{
+    color: orange;
+    
+}
+
+body{
+    background-color: #0c0c1d;
+    color: lightgray;
+}
+
+a{
+    text-decoration: none;
+    color: inherit;
+}
+
+section{
+    height: 100vh;
+    scroll-snap-align: center;
+    
+}
+
+@mixin mobile{
+    @media (max-width: 768px) {
+        @content;
+        
+    }
+}
+
+@mixin tablet{
+    @media (max-width: 1024px) {
+        @content;
+    }
+}
+
+@mixin desktop{
+    @media (max-width: 1350px) {
+        @content;
+    }
+}
+
+// Apply the mobile-specific mixin to set the height to 150vh only for the Services section
+@include mobile {
+    #ServiceSection {
+        height: 150vh;
+    }
+    #about-section{
+        height: 110vh;
+    }
+}

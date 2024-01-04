@@ -1,0 +1,89 @@
+@import "../../app.scss";
+
+.about {
+
+    height: 100%;
+    justify-content: center;
+    margin-top: 50px;
+    max-width: 1350px;
+    margin: auto;
+
+    @include mobile {
+        width: 100%;
+    }
+
+    h1 {
+        font-size: 65px;
+        text-align: center;
+        margin-top: 50px;
+        margin-bottom: 50px;
+        
+        @include mobile {
+            font-size: 46px;
+            margin-bottom: 10px;
+        }
+    }
+
+    .about-container {
+
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        gap: 50px;
+
+        @include mobile {
+            width: 100%;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .image {
+            width: 90%;
+            height: 100%;
+            background:
+                radial-gradient(black 15%, transparent 16%) 0 0,
+                radial-gradient(black 15%, transparent 16%) 8px 8px,
+                radial-gradient(rgba(255, 255, 255, .1) 15%, transparent 20%) 0 1px,
+                radial-gradient(rgba(255, 255, 255, .1) 15%, transparent 20%) 8px 9px;
+            background-color: #0c0c1d;
+            background-size: 16px 16px;
+            border-radius: 10%;
+            display: flex;
+            justify-content: center;
+            img {
+                width: 70%;
+                height: auto;
+                @include mobile {
+                    width: 60%;
+                }
+            }
+            @include mobile {
+                width: 80%;
+            }
+            
+        }
+
+        .text {
+            width: 90%;
+            p{
+                font-size: 20px;
+                text-align: justify;
+                @include mobile {
+                    font-size: 16px;
+                    width: 100%;
+                }
+            }
+            button{
+                margin-top: 10px;
+                background-color: orange;
+                // color: white;
+                border: none;
+                border-radius: 10px;
+                cursor: pointer;
+                padding: 15px;
+                width: 200px;
+            }
+        }
+    }
+}
