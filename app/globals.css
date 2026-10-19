@@ -1,0 +1,116 @@
+@import 'tailwindcss';
+
+/*
+  Semantic colour tokens. Components only ever reference these, so light mode
+  is a variable swap rather than a per-component rewrite. Dark is the default
+  and the original identity: #0c0c1d navy with an amber accent.
+*/
+:root {
+  --c-bg: #0c0c1d;
+  --c-bg-alt: #111132;
+  --c-surface: #16163a;
+  --c-border: #2a2a55;
+  --c-text: #e8e8f0;
+  --c-text-muted: #9b9bb0;
+  --c-accent: #ffa500;
+  --c-accent-soft: #ffa5001f;
+  --c-on-accent: #16163a;
+}
+
+.light {
+  --c-bg: #f6f6fb;
+  --c-bg-alt: #ececf6;
+  --c-surface: #ffffff;
+  --c-border: #d4d4e4;
+  --c-text: #14142b;
+  --c-text-muted: #55556e;
+  --c-accent: #b45c00;
+  --c-accent-soft: #b45c0014;
+  --c-on-accent: #ffffff;
+}
+
+@theme inline {
+  --color-bg: var(--c-bg);
+  --color-bg-alt: var(--c-bg-alt);
+  --color-surface: var(--c-surface);
+  --color-border-sub: var(--c-border);
+  --color-ink: var(--c-text);
+  --color-muted: var(--c-text-muted);
+  --color-accent: var(--c-accent);
+  --color-accent-soft: var(--c-accent-soft);
+  --color-on-accent: var(--c-on-accent);
+
+  --font-sans: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* Offsets anchor targets so the fixed header never covers a heading. */
+    scroll-padding-top: 5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--c-bg);
+    color: var(--c-text);
+  }
+
+  ::selection {
+    background-color: var(--c-accent);
+    color: var(--c-on-accent);
+  }
+
+  /* Visible keyboard focus everywhere — the old site had none. */
+  :focus-visible {
+    outline: 2px solid var(--c-accent);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@utility container-page {
+  width: 100%;
+  margin-inline: auto;
+  max-width: 80rem;
+  padding-inline: 1.25rem;
+  @media (min-width: 768px) {
+    padding-inline: 2.5rem;
+  }
+}
+
+/* Decorative oversized text behind the hero. Kept from the original design,
+   but at a readable-contrast-irrelevant opacity and marked aria-hidden. */
+@utility ghost-text {
+  color: transparent;
+  -webkit-text-stroke: 1px var(--c-border);
+  opacity: 0.55;
+}
+
+/* Theme-toggle icon swap. Driven by the class next-themes puts on <html>, so
+   no client state is needed and the markup is identical on server and client. */
+.icon-when-dark {
+  display: block;
+}
+.icon-when-light {
+  display: none;
+}
+.light .icon-when-dark {
+  display: none;
+}
+.light .icon-when-light {
+  display: block;
+}

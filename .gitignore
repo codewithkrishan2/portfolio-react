@@ -8,9 +8,28 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
-dist
-dist-ssr
 *.local
+
+# Next.js
+/.next/
+/out/
+next-env.d.ts
+*.tsbuildinfo
+
+# Env
+.env
+.env*.local
+
+# Build scratch
+/.tmp-img/
+
+# Agent working files: verification screenshots and reports. Kept on disk,
+# not in version control — the screenshots alone are several MB.
+/.agents/
+
+# Playwright
+/test-results/
+/playwright-report/
 
 # Editor directories and files
 .vscode/*
