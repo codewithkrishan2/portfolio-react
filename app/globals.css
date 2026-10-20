@@ -41,6 +41,7 @@
   --color-on-accent: var(--c-on-accent);
 
   --font-sans: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-script: var(--font-dancing-script), ui-serif, cursive;
 }
 
 @layer base {
@@ -113,4 +114,18 @@
 }
 .light .icon-when-light {
   display: block;
+}
+
+/* Custom cursor layers. Excluded in CSS rather than via React state so the
+   component never has to call setState from an effect body to decide whether
+   it should exist. */
+@media (pointer: coarse) {
+  .cursor-layer {
+    display: none !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cursor-layer {
+    display: none !important;
+  }
 }

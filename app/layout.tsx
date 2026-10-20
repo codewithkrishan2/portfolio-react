@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next'
-import { DM_Sans } from 'next/font/google'
+import { DM_Sans, Dancing_Script } from 'next/font/google'
 import Script from 'next/script'
 import './globals.css'
 import { site } from '@/lib/site'
@@ -14,6 +14,14 @@ const dmSans = DM_Sans({
   display: 'swap',
   weight: ['400', '500', '600', '700', '800'],
   variable: '--font-dm-sans',
+})
+
+// Script face for the hero signature.
+const dancingScript = Dancing_Script({
+  subsets: ['latin'],
+  display: 'swap',
+  weight: ['600', '700'],
+  variable: '--font-dancing-script',
 })
 
 const pageTitle = `${site.name} — ${site.title}`
@@ -126,7 +134,11 @@ const personSchema = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning className={dmSans.variable}>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${dmSans.variable} ${dancingScript.variable}`}
+    >
       <head>
         <script
           type="application/ld+json"

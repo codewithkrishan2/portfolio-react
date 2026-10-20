@@ -6,9 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "serve": "npx --yes serve out -l 4321",
+    "serve": "cd out && python3 -m http.server 4321 --bind 127.0.0.1",
     "lint": "eslint .",
     "optimize:images": "node scripts/optimize-images.mjs",
+    "extract:frames": "python3 scripts/extract_frames.py",
     "shots": "node scripts/capture-screenshots.mjs"
   },
   "dependencies": {

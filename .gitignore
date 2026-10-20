@@ -20,6 +20,10 @@ next-env.d.ts
 .env
 .env*.local
 
+# Python venv for scripts/extract_frames.py
+/.venv/
+__pycache__/
+
 # Build scratch
 /.tmp-img/
 

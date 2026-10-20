@@ -22,12 +22,16 @@ const VIEWPORTS = [
   { name: 'mobile', width: 390, height: 844 },
 ]
 
+/**
+ * Python's stdlib server rather than `npx serve`: no package download, so this
+ * works offline. Serves out/ as a plain static directory, which is exactly how
+ * Netlify serves the export.
+ */
 function serve() {
-  const proc = spawn('npx', ['--yes', 'serve', 'out', '-l', String(PORT), '--no-clipboard'], {
-    cwd: root,
+  return spawn('python3', ['-m', 'http.server', String(PORT), '--bind', '127.0.0.1'], {
+    cwd: path.join(root, 'out'),
     stdio: 'ignore',
   })
-  return proc
 }
 
 async function waitForServer(timeoutMs = 45_000) {

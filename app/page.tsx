@@ -1,5 +1,5 @@
 import Header from '@/components/Header'
-import Hero from '@/components/Hero'
+import CinematicHero from '@/components/hero/CinematicHero'
 import Parallax from '@/components/Parallax'
 import Services from '@/components/Services'
 import Experience from '@/components/Experience'
@@ -12,9 +12,9 @@ import Footer from '@/components/Footer'
 export default function Home() {
   return (
     <>
-      <Header />
+      <Header revealAfterHero />
       <main id="main">
-        <Hero />
+        <CinematicHero />
         <Parallax variant="services" />
         <Services />
         <Experience />

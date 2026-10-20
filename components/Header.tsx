@@ -6,16 +6,41 @@ import { navItems, site } from '@/lib/site'
 import Social from './Social'
 import ThemeToggle from './ThemeToggle'
 
-export default function Header() {
+export default function Header({
+  /**
+   * On the homepage the cinematic hero carries its own frosted nav pill, so the
+   * site header stays hidden until the hero has scrolled past. Two navigation
+   * bars stacked at the top would otherwise collide.
+   */
+  revealAfterHero = false,
+}: {
+  revealAfterHero?: boolean
+}) {
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const [visible, setVisible] = useState(!revealAfterHero)
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24)
+    const onScroll = () => {
+      const y = window.scrollY
+      setScrolled(y > 24)
+      if (revealAfterHero) {
+        const shouldShow = y > window.innerHeight * 0.8
+        setVisible(shouldShow)
+        // Collapse the mobile menu if the header slides away beneath it.
+        if (!shouldShow) setOpen(false)
+      }
+    }
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
+    window.addEventListener('resize', onScroll, { passive: true })
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+    }
+  }, [revealAfterHero])
+
+
 
   // Close the mobile menu on Escape.
   useEffect(() => {
@@ -27,7 +52,10 @@ export default function Header() {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-[400] transition-colors duration-300 ${
+      aria-hidden={!visible}
+      className={`fixed inset-x-0 top-0 z-[400] transition-all duration-500 ${
+        visible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
+      } ${!visible ? 'pointer-events-none' : ''} ${
         open
           ? 'bg-bg'
           : scrolled
