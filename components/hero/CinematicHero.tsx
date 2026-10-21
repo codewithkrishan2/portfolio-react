@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import { motion } from 'motion/react'
 import { site } from '@/lib/site'
 import CharacterCanvas from './CharacterCanvas'
@@ -17,7 +18,7 @@ import MagneticCursor from './MagneticCursor'
  */
 
 const navLinks = [
-  { label: 'Work', href: '#work' },
+  { label: 'Work', href: '/work' },
   { label: 'About', href: '#about' },
   { label: 'Contact', href: '#contact' },
 ]
@@ -86,12 +87,12 @@ export default function CinematicHero() {
         >
           {navLinks.map((link) => (
             <li key={link.href}>
-              <a
+              <Link
                 href={link.href}
                 className="block rounded-full px-4 py-1.5 text-[0.7rem] font-semibold tracking-[0.2em] text-white/85 uppercase transition hover:bg-white/15 hover:text-white md:cursor-none"
               >
                 {link.label}
-              </a>
+              </Link>
             </li>
           ))}
         </ul>

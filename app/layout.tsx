@@ -3,6 +3,8 @@ import localFont from 'next/font/local'
 import Script from 'next/script'
 import './globals.css'
 import { site } from '@/lib/site'
+import { graph, personSchema, websiteSchema } from '@/lib/schema'
+import JsonLd from '@/components/JsonLd'
 import ThemeProvider from '@/components/ThemeProvider'
 import Cursor from '@/components/Cursor'
 import ViewGuard from '@/components/ViewGuard'
@@ -49,28 +51,40 @@ export const metadata: Metadata = {
     template: `%s — ${site.name}`,
   },
   description: site.description,
+  /*
+    Google ignores the keywords meta tag for ranking. Kept deliberately short
+    and honest anyway: Bing and several smaller engines still read it, and it
+    costs nothing. The real targeting lives in the title, description, headings
+    and body copy.
+  */
   keywords: [
-    'Krishan Kant Singh Gautam',
-    'Full Stack Developer',
-    'Software Development Engineer',
-    'Backend Developer Pune',
+    site.name,
+    site.handle,
+    'Krishan Kant',
+    'Full Stack Developer Pune',
+    'Software Development Engineer Pune',
     'Java Spring Boot Developer',
-    'Node.js Developer',
-    'React Developer',
-    'Distributed Systems',
+    'Node.js Backend Developer',
+    'React Developer India',
   ],
   authors: [{ name: site.name, url: site.url }],
   creator: site.name,
+  publisher: site.name,
+  category: 'technology',
   alternates: {
     canonical: '/',
   },
   openGraph: {
-    type: 'website',
+    type: 'profile',
     url: site.url,
     siteName: site.name,
     title: pageTitle,
     description: site.description,
     locale: 'en_IN',
+    // Helps the handle resolve to this person on platforms that read OG profile.
+    firstName: 'Krishan Kant',
+    lastName: 'Singh Gautam',
+    username: site.handle,
     images: [
       {
         url: '/og-image.png',
@@ -106,48 +120,6 @@ export const viewport: Viewport = {
   ],
 }
 
-/** schema.org Person — every field here already existed somewhere on the site. */
-const personSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'Person',
-  name: site.name,
-  url: site.url,
-  image: `${site.url}/img/about.webp`,
-  jobTitle: site.title,
-  email: `mailto:${site.email}`,
-  telephone: site.phone,
-  address: {
-    '@type': 'PostalAddress',
-    addressLocality: 'Pune',
-    addressRegion: 'Maharashtra',
-    addressCountry: 'IN',
-  },
-  alumniOf: {
-    '@type': 'CollegeOrUniversity',
-    name: 'Kamla Nehru Institute of Technology',
-  },
-  worksFor: {
-    '@type': 'Organization',
-    name: 'Asmadiya Technologies',
-  },
-  knowsAbout: [
-    'Java',
-    'Spring Boot',
-    'Node.js',
-    'Express.js',
-    'React',
-    'Angular',
-    'TypeScript',
-    'PostgreSQL',
-    'Redis',
-    'Microservices',
-    'Event-Driven Architecture',
-    'REST API Design',
-    'AWS',
-  ],
-  sameAs: [site.socials.github, site.socials.linkedin, site.socials.instagram],
-}
-
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html
@@ -156,11 +128,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${dmSans.variable} ${dancingScript.variable}`}
     >
       <head>
-        <script
-          type="application/ld+json"
-          // Static, build-time constant — no user input reaches this string.
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }}
-        />
+        {/*
+          Person and WebSite live in the root layout so every page carries the
+          identity graph; page-specific nodes (ProfilePage, BlogPosting,
+          SoftwareSourceCode) are added by the routes and cross-reference these
+          by @id.
+        */}
+        <JsonLd json={graph(personSchema(), websiteSchema())} />
         {/*
           Entrance animations ship their starting state as inline
           `opacity:0`. With JavaScript disabled nothing ever animates in, so

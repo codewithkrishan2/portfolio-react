@@ -1,3 +1,5 @@
+import JsonLd from '@/components/JsonLd'
+import { graph, profilePageSchema } from '@/lib/schema'
 import Header from '@/components/Header'
 import CinematicHero from '@/components/hero/CinematicHero'
 import Parallax from '@/components/Parallax'
@@ -12,6 +14,9 @@ import Footer from '@/components/Footer'
 export default function Home() {
   return (
     <>
+      {/* Declares the homepage as this person's profile page, referencing the
+          Person and WebSite nodes the root layout already emits. */}
+      <JsonLd json={graph(profilePageSchema())} />
       <Header revealAfterHero />
       <main id="main">
         <CinematicHero />

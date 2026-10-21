@@ -125,6 +125,16 @@ export type Project = {
   imageAlt: string
   links: { label: string; href: string }[]
   note?: string
+  /**
+   * Longer write-up for /work/<slug>. Each project page is its own URL with its
+   * own metadata and SoftwareSourceCode schema, which gives search engines far
+   * more to index than a single card on the homepage.
+   */
+  detail: {
+    /** One sentence for the page meta description. Keep under ~155 characters. */
+    summary: string
+    sections: { heading: string; body: string[] }[]
+  }
 }
 
 export const projects: Project[] = [
@@ -147,6 +157,34 @@ export const projects: Project[] = [
       { label: 'Frontend repo', href: 'https://github.com/codewithkrishan2/frontend' },
     ],
     note: 'Actively in development — not yet deployed.',
+    detail: {
+      summary:
+        'A full stack code review platform in React and Spring Boot, with a provider-agnostic SCM layer covering GitHub and Bitbucket.',
+      sections: [
+        {
+          heading: 'Why a provider-agnostic SCM layer',
+          body: [
+            'Integrating a single SCM is straightforward. Integrating a second one is where the design is tested, because the obvious approach — branching on provider throughout the codebase — turns every new feature into a decision about which provider supports it.',
+            'Instead, each provider is an adapter behind one normalized interface. Operations are described generically, capabilities are declared as flags rather than discovered through failure, and webhook payloads are mapped into a common event shape at the edge. Provider-specific configuration lives in JSONB rather than in separate columns per provider, so adding Bitbucket needed no migration.',
+            'The result is that supporting a new SCM means writing a new adapter, not touching the review orchestration.',
+          ],
+        },
+        {
+          heading: 'Authentication and token lifecycle',
+          body: [
+            'Authentication is GitHub OAuth 2.0. The part that takes the real work is not the initial handshake but everything after it: refreshing tokens before they expire, surviving a revoked grant without wedging the account, and knowing whether credentials are ready before an operation is attempted rather than after it fails.',
+            'Credential readiness is modelled explicitly, so the UI can tell a user that a repository needs reconnecting instead of surfacing a generic error from three layers down.',
+          ],
+        },
+        {
+          heading: 'Frontend',
+          body: [
+            'The React frontend covers authentication, SCM provider connection, repository management, running a review and visualising results. Components are built to be reused across those flows rather than per-screen, and every view talks to the Spring Boot REST APIs through one typed client.',
+            'REST contracts carry validation, authorization and centralised exception handling, so the frontend gets consistent error shapes instead of whatever each endpoint happened to throw.',
+          ],
+        },
+      ],
+    },
   },
   {
     slug: 'yasgifts',
@@ -164,6 +202,32 @@ export const projects: Project[] = [
     imageAlt: 'Gift store web interface',
     links: [],
     note: 'Marketplace is currently offline, so there is no live demo to link.',
+    detail: {
+      summary:
+        'Backend lead on a personalised gift marketplace supporting 1000+ vendors, built with Django REST Framework and deployed on AWS.',
+      sections: [
+        {
+          heading: 'A marketplace is three products, not one',
+          body: [
+            'A gifting marketplace looks like a storefront and behaves like three separate applications: a customer-facing catalogue, a vendor-facing management console, and the order pipeline that connects them. Each has different access rules and different failure modes.',
+            'I led the backend across all three, which meant the vendor onboarding flow, product listings, customer workflows and order processing had to agree on one domain model rather than each carrying its own interpretation of what a product or an order is.',
+          ],
+        },
+        {
+          heading: 'Order processing across the purchase lifecycle',
+          body: [
+            'The order pipeline ties customers, products, vendors and backend services together through the full purchase lifecycle. The interesting states are the ones in the middle: an order that is paid but not yet accepted by a vendor, or partially fulfilled across vendors, needs to be representable rather than treated as an error.',
+            'Scaling to over a thousand vendors mostly meant resisting per-vendor special cases and keeping the lifecycle uniform.',
+          ],
+        },
+        {
+          heading: 'Operations',
+          body: [
+            'Built with Django REST Framework, deployed and operated on AWS. Running what you build changes how you build it — it is a quick way to learn which log lines you actually need at two in the morning.',
+          ],
+        },
+      ],
+    },
   },
   {
     slug: 'blog-api',
@@ -180,6 +244,32 @@ export const projects: Project[] = [
     image: '/img/projects/blog.webp',
     imageAlt: '',
     links: [{ label: 'Source', href: 'https://github.com/codewithkrishan2/blog' }],
+    detail: {
+      summary:
+        'A Spring Boot blogging API built to get the data layer right: JPA relationships, transactions, pagination, indexing and Redis caching.',
+      sections: [
+        {
+          heading: 'The point was the data layer',
+          body: [
+            'A CRUD blog API is not a hard problem. I built this one to practise the parts that are easy to skip and expensive to retrofit: how entity relationships are mapped, where transaction boundaries sit, and what happens to a list endpoint once the table is large.',
+            'Controller, service, repository and entity layers are kept genuinely separate rather than nominally separate — the service layer owns the transaction, and entities never leave it unmapped.',
+          ],
+        },
+        {
+          heading: 'Making reads cheap',
+          body: [
+            'Pagination came first, because an unbounded list endpoint is a time bomb. Then indexing against the queries that actually ran, then query optimisation where the plans were poor.',
+            'Redis caching came last, deliberately. Caching is an easy way to hide an inefficient query rather than fix it, so it is worth exhausting the database-level work first and then caching what is genuinely hot and genuinely stable.',
+          ],
+        },
+        {
+          heading: 'Error handling',
+          body: [
+            'Validation and centralised exception handling mean clients get consistent, predictable error shapes instead of whatever Hibernate happened to throw. That is less visible than a feature and more useful than most.',
+          ],
+        },
+      ],
+    },
   },
   {
     slug: 'contact-manager',
@@ -196,6 +286,24 @@ export const projects: Project[] = [
     imageAlt: '',
     links: [{ label: 'Source', href: 'https://github.com/codewithkrishan2/contact-manager' }],
     note: 'An early project, kept here because the fundamentals still hold up.',
+    detail: {
+      summary:
+        'A server-rendered contact manager in Spring MVC and Thymeleaf, with session authentication and per-user data isolation.',
+      sections: [
+        {
+          heading: 'Server-rendered on purpose',
+          body: [
+            'This predates my React work and is server-rendered with Thymeleaf. Revisiting it, the thing worth keeping is how little it needs: full CRUD, search and image upload with no client-side state management at all, because the server owns the state.',
+          ],
+        },
+        {
+          heading: 'Per-user isolation',
+          body: [
+            'Session-based authentication with strict per-user data isolation. The lesson that stuck was that isolation belongs in the query layer, not the view: filtering by the current user when rendering is one forgotten clause away from leaking another user\u2019s contacts.',
+          ],
+        },
+      ],
+    },
   },
 ]
 

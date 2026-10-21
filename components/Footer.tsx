@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { navItems, site } from '@/lib/site'
 import Social from './Social'
 
@@ -8,7 +9,12 @@ export default function Footer() {
         <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
           <div className="max-w-sm">
             <p className="text-lg font-extrabold tracking-tight">{site.name}</p>
-            <p className="mt-2 text-sm leading-relaxed text-muted">
+            {/* The handle is a search term people use on its own, so it needs to
+                exist as readable text here, not only inside profile URLs. */}
+            <p className="mt-1 text-sm text-muted">
+              Known online as <span className="font-semibold text-ink">{site.handle}</span>
+            </p>
+            <p className="mt-3 text-sm leading-relaxed text-muted">
               {site.title} based in {site.location}. Building backend systems and the interfaces
               that use them.
             </p>
@@ -21,13 +27,13 @@ export default function Footer() {
             </h2>
             <ul className="mt-4 grid grid-cols-2 gap-x-10 gap-y-2">
               {navItems.map((item) => (
-                <li key={item.id}>
-                  <a
-                    href={`#${item.id}`}
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
                     className="text-sm text-muted transition hover:text-accent"
                   >
                     {item.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>

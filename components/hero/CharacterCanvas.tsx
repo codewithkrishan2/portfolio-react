@@ -106,19 +106,39 @@ export default function CharacterCanvas({
       )
 
       // Neutral frame first: it is what shows before the pointer is seen, on
-      // touch devices, and under reduced-motion.
+      // touch devices, and under reduced-motion. It is also the LCP candidate,
+      // so nothing else may compete with it.
       centerFrame = await loadImage('/frames/center.webp')
       if (cancelled) return
       draw()
       onReady?.(manifest.backgroundHex)
 
+      // Tracking needs all 64 frames, which is ~3 MB. Fetching them straight
+      // away makes them contend with the rest of first paint for bandwidth and
+      // decode time, and LCP is a ranking signal. They are deferred until the
+      // browser reports itself idle instead; until then the neutral frame is
+      // already on screen, so there is nothing visibly missing.
+      await whenIdle()
+      if (cancelled) return
+
+      if (reducedMotion || coarsePointer) return
+
       frames = await Promise.all(names.map(loadImage))
       if (cancelled) return
 
-      if (!reducedMotion && !coarsePointer) {
-        window.addEventListener('pointermove', onPointerMove, { passive: true })
-        raf = requestAnimationFrame(tick)
-      }
+      window.addEventListener('pointermove', onPointerMove, { passive: true })
+      raf = requestAnimationFrame(tick)
+    }
+
+    /** requestIdleCallback where available, with a timeout fallback for Safari. */
+    function whenIdle(): Promise<void> {
+      return new Promise((resolve) => {
+        if ('requestIdleCallback' in window) {
+          window.requestIdleCallback(() => resolve(), { timeout: 2500 })
+        } else {
+          setTimeout(resolve, 1200)
+        }
+      })
     }
 
     function onPointerMove(event: PointerEvent) {

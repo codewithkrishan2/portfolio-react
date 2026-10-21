@@ -94,6 +94,12 @@ export default function About() {
               </dt>
               <dd className="mt-1.5 text-sm text-ink">Travel, photography, building side projects</dd>
             </div>
+            <div>
+              <dt className="text-xs font-semibold tracking-[0.14em] text-accent uppercase">
+                Online as
+              </dt>
+              <dd className="mt-1.5 text-sm text-ink">{site.handle}</dd>
+            </div>
           </dl>
 
           <a

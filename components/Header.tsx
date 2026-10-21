@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
 import { motion, AnimatePresence } from 'motion/react'
 import { navItems, site } from '@/lib/site'
 import Social from './Social'
@@ -64,23 +65,23 @@ export default function Header({
       }`}
     >
       <div className="container-page flex h-20 items-center justify-between gap-4">
-        <a href="#home" className="group flex items-baseline gap-2">
+        <Link href="/" className="group flex items-baseline gap-2">
           <span className="text-lg font-extrabold tracking-tight">{site.shortName}</span>
           <span className="h-1.5 w-1.5 rounded-full bg-accent transition group-hover:scale-150" />
-        </a>
+        </Link>
 
         {/* Desktop navigation: real anchors with real hrefs, so each section is
             a crawlable link target. */}
         <nav aria-label="Main navigation" className="hidden lg:block">
           <ul className="flex items-center gap-7">
             {navItems.map((item) => (
-              <li key={item.id}>
-                <a
-                  href={`#${item.id}`}
+              <li key={item.href}>
+                <Link
+                  href={item.href}
                   className="relative text-sm font-medium text-muted transition-colors hover:text-ink after:absolute after:-bottom-1.5 after:left-0 after:h-px after:w-0 after:bg-accent after:transition-all hover:after:w-full"
                 >
                   {item.label}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
@@ -135,14 +136,14 @@ export default function Header({
           >
             <ul className="container-page flex flex-col gap-1 py-5">
               {navItems.map((item) => (
-                <li key={item.id}>
-                  <a
-                    href={`#${item.id}`}
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
                     onClick={() => setOpen(false)}
                     className="block rounded-lg px-3 py-3 text-base font-medium text-muted transition hover:bg-surface hover:text-accent"
                   >
                     {item.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
               <li className="px-3 pt-3">

@@ -129,3 +129,109 @@
     display: none !important;
   }
 }
+
+/* Article typography. Hand-rolled rather than @tailwindcss/typography, which
+   is not a dependency here. Scoped to .prose so it cannot leak into the
+   marketing sections. */
+.prose {
+  color: var(--c-text-muted);
+  font-size: 1.0625rem;
+  line-height: 1.75;
+}
+.prose > * + * {
+  margin-top: 1.25em;
+}
+.prose h2 {
+  color: var(--c-text);
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin-top: 2.5em;
+  margin-bottom: -0.25em;
+  scroll-margin-top: 6rem;
+}
+.prose h3 {
+  color: var(--c-text);
+  font-size: 1.175rem;
+  font-weight: 650;
+  margin-top: 2em;
+  margin-bottom: -0.4em;
+  scroll-margin-top: 6rem;
+}
+.prose strong {
+  color: var(--c-text);
+  font-weight: 650;
+}
+.prose a {
+  color: var(--c-accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+.prose a:hover {
+  text-decoration-thickness: 2px;
+}
+.prose ul,
+.prose ol {
+  padding-left: 1.3em;
+}
+.prose ul {
+  list-style: disc;
+}
+.prose ol {
+  list-style: decimal;
+}
+.prose li + li {
+  margin-top: 0.5em;
+}
+.prose li::marker {
+  color: var(--c-accent);
+}
+.prose code {
+  color: var(--c-text);
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: 0.3rem;
+  padding: 0.1em 0.35em;
+  font-size: 0.875em;
+}
+.prose pre {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: 0.75rem;
+  padding: 1.1rem 1.25rem;
+  overflow-x: auto;
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+.prose pre code {
+  background: none;
+  border: 0;
+  padding: 0;
+  font-size: inherit;
+}
+.prose blockquote {
+  border-left: 3px solid var(--c-accent);
+  padding-left: 1.1rem;
+  font-style: italic;
+}
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.925rem;
+}
+.prose th,
+.prose td {
+  border-bottom: 1px solid var(--c-border);
+  padding: 0.55rem 0.75rem;
+  text-align: left;
+}
+.prose th {
+  color: var(--c-text);
+  font-weight: 650;
+}
+.prose figure figcaption {
+  margin-top: 0.6rem;
+  font-size: 0.85rem;
+  color: var(--c-text-muted);
+}

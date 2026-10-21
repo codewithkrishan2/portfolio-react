@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+import Link from 'next/link'
 import { motion } from 'motion/react'
 import { projects, type Project } from '@/lib/data'
 import SectionHeading from './SectionHeading'
@@ -100,6 +101,25 @@ export default function Projects() {
                 </ul>
 
                 <div className="mt-7 flex flex-wrap items-center gap-x-5 gap-y-2">
+                  {/* Internal link to the case study first: it keeps crawlers
+                      moving through the site rather than straight out to
+                      GitHub, and each case study is its own indexable page. */}
+                  <Link
+                    href={`/work/${project.slug}`}
+                    className="inline-flex items-center gap-1.5 text-sm font-semibold text-accent underline decoration-accent/40 decoration-2 underline-offset-4 transition hover:decoration-accent"
+                  >
+                    Read the case study
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path
+                        d="M5 12h14m0 0-6-6m6 6-6 6"
+                        stroke="currentColor"
+                        strokeWidth="2.2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </Link>
+
                   {project.links.map((link) => (
                     <a
                       key={link.href}
