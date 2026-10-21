@@ -30,7 +30,14 @@ export async function generateMetadata({
   const title = `${project.title} — case study`
 
   return {
-    title,
+    /*
+      Absolute, so the "— Krishan Kant Singh Gautam" template suffix is not
+      appended: with it, the longer project names ran to 68 characters and
+      Google truncates around 60. The homepage is what targets the name query;
+      these pages target the project and its stack, and the brand is still
+      carried by the Person schema, breadcrumbs and the header.
+    */
+    title: { absolute: title },
     description: project.detail.summary,
     keywords: [...project.stack, project.title, site.name],
     alternates: { canonical: `/work/${project.slug}` },
