@@ -24,24 +24,55 @@ HTML so every page ships crawler-visible content.
 npm install
 npm run dev               # dev server on :3000
 npm run build             # static export to out/
+npm run serve             # serve out/ exactly as Netlify would, on :4321
 npm run lint              # eslint
 npm run optimize:images   # re-generate public/img from assets/originals
 npm run shots             # build first, then capture screenshots at 3 widths
 ```
 
+Regenerating the hero character frames needs OpenCV, which PEP 668 blocks from
+a system pip, so use a venv:
+
+```bash
+python3 -m venv .venv
+.venv/bin/pip install opencv-python numpy
+.venv/bin/python scripts/extract_frames.py
+```
+
 ## Layout
 
 ```
-app/              routes, metadata, robots.ts, sitemap.ts
-components/       section and UI components
-lib/site.ts       contact details, URLs, analytics IDs
-lib/data.ts       all page copy: services, experience, projects, skills
-public/img/       optimised, shipped assets
-assets/originals/ full-resolution sources (not deployed)
-scripts/          image pipeline, OG image, screenshot capture
+app/               routes, metadata, robots.ts, sitemap.ts
+components/        section and UI components
+components/hero/   full-viewport character hero, canvas renderer, cursor
+lib/site.ts        contact details, URLs, analytics IDs
+lib/data.ts        all page copy: services, experience, projects, skills
+public/img/        optimised, shipped assets
+public/frames/     64 head-rotation frames + manifest.json (generated)
+assets/            source video and full-resolution images (not deployed)
+scripts/           frame extraction, image pipeline, OG image, screenshots
 ```
 
 Content changes generally mean editing `lib/data.ts` only.
+
+## The character hero
+
+`components/hero/CharacterCanvas.tsx` renders the character's head following
+the cursor. Two constraints shape it:
+
+- The source MP4 is never used at runtime. A generated MP4 carries a single
+  keyframe, so `video.currentTime` makes the decoder walk from frame 0 on every
+  seek and stalls the main thread. `scripts/extract_frames.py` pre-bakes 64
+  WebP frames instead, 5.625° apart, plus a neutral `center.webp`.
+- Exactly one frame is drawn per paint, at full opacity. Cross-fading adjacent
+  frames would put two faces on screen at partial alpha and read as ghosting.
+
+No `perspective`, `rotateX` or `rotateY` appears anywhere in the hero subtree,
+so the page and the character's body stay pixel-stable.
+
+`manifest.json` carries the detected background colour and the face pivot, so
+the renderer holds no hardcoded geometry. The script's docstring records the
+measurement approaches that were tried and failed, to save repeating them.
 
 ## SEO notes
 

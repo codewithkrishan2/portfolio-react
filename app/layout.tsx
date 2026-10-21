@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next'
-import { DM_Sans, Dancing_Script } from 'next/font/google'
+import localFont from 'next/font/local'
 import Script from 'next/script'
 import './globals.css'
 import { site } from '@/lib/site'
@@ -7,21 +7,37 @@ import ThemeProvider from '@/components/ThemeProvider'
 import Cursor from '@/components/Cursor'
 import ViewGuard from '@/components/ViewGuard'
 
-// Self-hosted at build time. Replaces the old render-blocking Google Fonts
-// request that pulled 22 weight/style axes of DM Sans.
-const dmSans = DM_Sans({
-  subsets: ['latin'],
+/*
+  Fonts are committed to the repo and loaded locally rather than through
+  next/font/google.
+
+  next/font/google fetches from fonts.googleapis.com during `next build`, which
+  makes the build fail without network access and puts a third party on the
+  critical path of every deploy. These are the same variable-font latin subsets
+  Google serves, so the rendered result is identical — just without the
+  build-time dependency.
+
+  Both files are variable fonts, hence a weight range rather than a list.
+  The latin subset covers U+0000-00FF, so accented characters such as the
+  e-acute in "resume" still render.
+*/
+const dmSans = localFont({
+  src: './fonts/DMSans-Variable-latin.woff2',
+  weight: '400 800',
+  style: 'normal',
   display: 'swap',
-  weight: ['400', '500', '600', '700', '800'],
   variable: '--font-dm-sans',
+  fallback: ['ui-sans-serif', 'system-ui', 'sans-serif'],
 })
 
 // Script face for the hero signature.
-const dancingScript = Dancing_Script({
-  subsets: ['latin'],
+const dancingScript = localFont({
+  src: './fonts/DancingScript-Variable-latin.woff2',
+  weight: '600 700',
+  style: 'normal',
   display: 'swap',
-  weight: ['600', '700'],
   variable: '--font-dancing-script',
+  fallback: ['ui-serif', 'cursive'],
 })
 
 const pageTitle = `${site.name} — ${site.title}`

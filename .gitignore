@@ -24,8 +24,10 @@ next-env.d.ts
 /.venv/
 __pycache__/
 
-# Build scratch
+# Build and diagnostic scratch
 /.tmp-img/
+/.tmp-probe/
+/.tmp-dbg/
 
 # Agent working files: verification screenshots and reports. Kept on disk,
 # not in version control — the screenshots alone are several MB.

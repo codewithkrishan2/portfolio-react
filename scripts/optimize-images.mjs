@@ -24,11 +24,12 @@ const out = path.join(pub, 'img')
 
 /** [source, destination, width, height|null, fit] */
 const JOBS = [
-  // Hero + about + services photography
-  ['hero.webp', 'hero.webp', 1000, null, 'inside'],
+  // About portrait and the avatar cursor sprite.
+  //
+  // The old hero photo, services photo and scroll chevron are deliberately
+  // absent: the cinematic hero replaced that layout, so nothing references
+  // them any more.
   ['kksg.png', 'about.webp', 820, null, 'inside'],
-  ['people.webp', 'people.webp', 900, null, 'inside'],
-  ['scroll.png', 'scroll.webp', 60, null, 'inside'],
   ['favicon.png', 'cursor.webp', 64, 64, 'cover'],
 
   // Parallax layers (kept at the user's request, just far lighter)
